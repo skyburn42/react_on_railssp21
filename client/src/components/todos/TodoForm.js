@@ -1,6 +1,12 @@
 import { Component } from 'react';
 class TodoForm extends Component {
   state = { title: "", complete: false }
+  componentDidMount() {
+    if (this.props.id) {
+      const { id, title, complete } = this.props 
+      this.setState({ id, title, complete})
+    }
+  }
   // store the user input into state
   handleChange = (e) => {
     const { name, value } = e.target
@@ -8,8 +14,14 @@ class TodoForm extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault()
-    // adding the todo the user made from state to the add function
-    this.props.addTodo(this.state)
+    if (this.props.id) {
+      const { updateTodo, id, toggleForm } = this.props 
+      updateTodo(id, this.state)
+      toggleForm()
+    } else {
+      // adding the todo the user made from state to the add function
+      this.props.addTodo(this.state)
+    }
     // clear out the form
     this.setState({ title: "", complete: false })
   }
